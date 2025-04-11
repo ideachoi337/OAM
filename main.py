@@ -85,7 +85,7 @@ def train(opt):
     writer = SummaryWriter()
     model = MambaNet(opt).cuda()
     if opt['stage2']:
-        checkpoint = torch.load(opt["checkpoint_path"]+"/ckp_best_stg1.pth.tar")
+        checkpoint = torch.load(opt["checkpoint_path"]+f"/{'checkpoint' if opt['use_last_ckp'] else 'ckp_best'}_stg1.pth.tar")
         base_dict=checkpoint['state_dict']
         model.load_state_dict(base_dict)
     
@@ -207,7 +207,7 @@ def eval_map_nms(opt, dataset, output_cls, output_reg, labels_cls, labels_reg):
     proposal_dict=[]
     
     num_class = opt["num_of_class"]
-    unit_size = opt['segment_size']
+    unit_size = opt['sup_segment_size']
     threshold=opt['threshold']
     anchors=opt['anchors']
                                              
@@ -252,7 +252,7 @@ def eval_map_nms(opt, dataset, output_cls, output_reg, labels_cls, labels_reg):
 
 def eval_map_supnet(opt, dataset, output_cls, output_reg, labels_cls, labels_reg):
     model = SuppressNet(opt).cuda()
-    checkpoint = torch.load(opt["checkpoint_path"]+f"/ckp_best_suppress_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
+    checkpoint = torch.load(opt["checkpoint_path"]+f"/{'checkpoint' if opt['use_last_ckp'] else 'ckp_best'}_suppress_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
     base_dict=checkpoint['state_dict']
     model.load_state_dict(base_dict)
     model.eval()
@@ -261,7 +261,7 @@ def eval_map_supnet(opt, dataset, output_cls, output_reg, labels_cls, labels_reg
     proposal_dict=[]
     
     num_class = opt["num_of_class"]
-    unit_size = opt['segment_size']
+    unit_size = opt['sup_segment_size']
     threshold=opt['threshold']
     anchors=opt['anchors']
                                              
@@ -322,7 +322,7 @@ def eval_map_supnet(opt, dataset, output_cls, output_reg, labels_cls, labels_reg
  
 def test_frame(opt): 
     model = MambaNet(opt).cuda()
-    checkpoint = torch.load(opt["checkpoint_path"]+f"/ckp_best_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
+    checkpoint = torch.load(opt["checkpoint_path"]+f"/{'checkpoint' if opt['use_last_ckp'] else 'ckp_best'}_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
     base_dict=checkpoint['state_dict']
     model.load_state_dict(base_dict)
     model.eval()
@@ -355,7 +355,7 @@ def test_frame(opt):
 
 def test(opt): 
     model = MambaNet(opt).cuda()
-    checkpoint = torch.load(opt["checkpoint_path"]+f"/ckp_best_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
+    checkpoint = torch.load(opt["checkpoint_path"]+f"/{'checkpoint' if opt['use_last_ckp'] else 'ckp_best'}_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
     base_dict=checkpoint['state_dict']
     model.load_state_dict(base_dict)
     model.eval()
@@ -382,13 +382,13 @@ def test(opt):
 
 def test_online(opt): 
     model = MambaNet(opt).cuda()
-    checkpoint = torch.load(opt["checkpoint_path"]+f"/ckp_best_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
+    checkpoint = torch.load(opt["checkpoint_path"]+f"/{'checkpoint' if opt['use_last_ckp'] else 'ckp_best'}_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
     base_dict=checkpoint['state_dict']
     model.load_state_dict(base_dict)
     model.eval()
     
     sup_model = SuppressNet(opt).cuda()
-    checkpoint = torch.load(opt["checkpoint_path"]+f"/ckp_best_suppress_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
+    checkpoint = torch.load(opt["checkpoint_path"]+f"/{'checkpoint' if opt['use_last_ckp'] else 'ckp_best'}_suppress_{'stg2' if opt['stage2'] else 'stg1'}.pth.tar")
     base_dict=checkpoint['state_dict']
     sup_model.load_state_dict(base_dict)
     sup_model.eval()

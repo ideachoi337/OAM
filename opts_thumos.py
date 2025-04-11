@@ -37,6 +37,10 @@ def parse_opt():
         '--pad',
         action='store_true'
     )
+    parser.add_argument(
+        '--use_last_ckp',
+        action='store_true'
+    )
     
     # Overall Dataset settings
     parser.add_argument(
